@@ -1,4 +1,4 @@
-# Building AI Applications with ChatGPT
+# Building AI Applications with ChatGPT and OpenAI LLMs
 
 Sumudu Tennakoon, Ph.D.
 
