@@ -1,7 +1,7 @@
-# Demo App: Building AI Applications with ChatGPT and OpenAI LLMs
+# Demo App for the course Building AI Applications with ChatGPT and OpenAI LLMs
 # by Sumudu Tennakoon
 # Last Update: 2022-07-09
-# streamlit run .GitHub\BuildingAIApplicationsWithChatGPT-main\ChatGPT_Demo_App.py
+# streamlit run .\GitHub\BuildingAIApplicationsWithChatGPT-main\DemoApp\ChatGPT_Demo_App.py
 
 import streamlit as st
 
