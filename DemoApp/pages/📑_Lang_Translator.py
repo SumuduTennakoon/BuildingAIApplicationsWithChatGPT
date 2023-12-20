@@ -3,6 +3,7 @@
 # Last Update: 2022-07-09
 
 import openai
+from openai import OpenAI
 import streamlit as st
 import configparser
 import os
@@ -38,17 +39,24 @@ to_language = st.selectbox(
 st.subheader(F"{from_language} -> {to_language}")
 
 def translate(input_text, from_language, to_language):
-    prompt = F"Translate this text in {from_language} into {to_language}:\n\n{input_text}\n\n"
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt= prompt,
-        temperature=0.3,
-        max_tokens=100,
-        top_p=1.0,
-        frequency_penalty=0.0,
-        presence_penalty=0.0
+    client = OpenAI(api_key=openai_api_key)
+    
+    MODEL = "gpt-3.5-turbo"
+    INSTRUCTIONS = F"Translate this text in {from_language} into {to_language}."
+
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": INSTRUCTIONS},
+            {"role": "user", "content": input_text},
+        ],
+        temperature=0,
+        max_tokens=200
     )
-    return prompt, response 
+    
+    output_text = response.choices[0].message.content
+    usage = response.usage.model_dump()
+    return INSTRUCTIONS, response.model_dump(), output_text, usage
 
 
 with st.form("my_form"):
@@ -57,11 +65,11 @@ with st.form("my_form"):
     if submitted:
         openai.api_key = openai_api_key
 
-        prompt, response  = translate(input_text, from_language, to_language)
-        st.info(response["choices"][0]["text"])
+        instruction_prompt, response, output_text, usage  = translate(input_text, from_language, to_language)
+        st.info(output_text)
 
         with st.expander("Prompt"):
-            st.code(prompt)
+            st.code(instruction_prompt)
 
         with st.expander("Response"):
             st.write(response)
